@@ -42,13 +42,16 @@ function createSunMaterial() {
 function createSun() {
 	var geometry = new THREE.SphereGeometry(15, 30, 30);
 	var material = createSunMaterial();
-	// var glow = new THREE.PointLight( 0xffffff, 3, 100 );
 
 	sun = new THREE.Mesh(geometry, material);
 	sun.name = 'sun';
-
-	// glow.add(sun);
 	scene.add(sun);
+}
+
+function createGlow() {
+	var glow = new THREE.PointLight( 0xffffff, 0.5, 200 );
+	glow.position.set(0, 0 ,0);
+	scene.add(glow);
 }
 
 
@@ -68,7 +71,7 @@ function init() {
 	createRenderer();
 	createCamera();
 	// createLight();
-	// createSunLight();
+	createGlow();
 	createSun();
 	
 	document.body.appendChild(renderer.domElement);
