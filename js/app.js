@@ -2,6 +2,7 @@ var scene;
 var camera;
 var renderer;
 var cameraControls;
+var sun;
 
 function createRenderer() {
 	renderer = new THREE.WebGLRenderer();
@@ -12,7 +13,7 @@ function createRenderer() {
 
 function createCamera() {
 	camera = new THREE.PerspectiveCamera(
-		45,
+		125,
 		window.innerWidth / window.innerHeight,
 		0.1, 1000);
 	camera.position.x = 15;
@@ -23,13 +24,42 @@ function createCamera() {
 	cameraControls = new THREE.OrbitControls(camera);
 }
 
+function createSunMaterial() {
+	
+	var texture = new THREE.Texture();
+	var loader = new THREE.ImageLoader();
+	loader.load('assets/2k_sun.jpg', function(image) {
+		texture.image = image;
+		texture.needsUpdate = true;
+	});
+
+	var material = new THREE.MeshBasicMaterial();
+	material.map = texture;
+
+	return material;
+}
+
+function createSun() {
+	var geometry = new THREE.SphereGeometry(15, 30, 30);
+	var material = createSunMaterial();
+	// var glow = new THREE.PointLight( 0xffffff, 3, 100 );
+
+	sun = new THREE.Mesh(geometry, material);
+	sun.name = 'sun';
+
+	// glow.add(sun);
+	scene.add(sun);
+}
+
+
 function createLight() {
-	var spotLight = new THREE.SpotLight(0xffffff);
-	spotLight.position.set(10, 40, 20);
-	spotLight.shadowCameraNear = 20;
-	spotLight.shadowCameraFar = 50;
-	spotLight.castShadow = true;
-	scene.add(spotLight);
+	// var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+	// directionalLight.position.set(100, 10, -50);
+	// directionalLight.name = "directional";
+	// scene.add(directionalLight);
+
+	var ambientLight = new THREE.AmbientLight(0x111111);
+	// scene.add(ambientLight);
 }
 
 function init() {
@@ -37,7 +67,9 @@ function init() {
 
 	createRenderer();
 	createCamera();
-	createLight();
+	// createLight();
+	// createSunLight();
+	createSun();
 	
 	document.body.appendChild(renderer.domElement);
 
